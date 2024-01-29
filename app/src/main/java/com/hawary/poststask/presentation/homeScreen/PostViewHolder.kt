@@ -16,19 +16,10 @@ class PostViewHolder(private val binding: PostItemBinding) : RecyclerView.ViewHo
     fun bind(post: Post) {
         binding.title.text = post.title
         binding.body.text = post.body
-//        binding.info.setOnClickListener {
-//            showInfoDialog(post.id.toString(), post.userId.toString(), binding.root.context)
-//        }
         binding.body.setOnClickListener {
             val action = MainFragmentDirections.actionMainFragmentToPostDetailsFragment(post)
             binding.root.findNavController().navigate(action)
         }
     }
 
-    private fun showInfoDialog(postId: String, userId: String, context: Context) {
-        AestheticDialog.Builder(context as Activity, DialogStyle.EMOTION, DialogType.ERROR)
-            .setTitle(postId)
-            .setMessage(userId)
-            .show()
-    }
 }
