@@ -38,29 +38,30 @@ class MainFragment : Fragment() {
         val adapter = PostsAdapter()
         binding.recyclerView.adapter = adapter
 
-        lifecycleScope.launchWhenCreated {
+        lifecycleScope.launchWhenStarted {
             viewModel.posts.observe(viewLifecycleOwner) {
-                when (it) {
-                    is ApiResult.Success -> {
-                        binding.progressBar.visibility = View.GONE
-                        adapter.submitList(it.data)
-                        showSuccess()
+                    when (it) {
+                        is ApiResult.Success -> {
+                            binding.progressBar.visibility = View.GONE
+                            adapter.submitList(it.data)
+                            showSuccess()
+                        }
+                        is ApiResult.Error -> {
+                            binding.progressBar.visibility = View.GONE
+                            showError(it.errorMessage)
+                        }
+                        is ApiResult.Loading -> {
+                            binding.progressBar.visibility = View.VISIBLE
+                        }
                     }
-                    is ApiResult.Error -> {
-                        binding.progressBar.visibility = View.GONE
-                        showError(it.errorMessage)
-                    }
-                    is ApiResult.Loading -> {
-                        binding.progressBar.visibility = View.VISIBLE
-                    }
-                }
+
             }
         }
 
     }
 
     private fun showSuccess() {
-        AestheticDialog.Builder(requireActivity(), DialogStyle.EMOTION, DialogType.SUCCESS)
+            AestheticDialog.Builder(requireActivity(), DialogStyle.EMOTION, DialogType.SUCCESS)
             .setTitle("Success")
             .show()
     }
